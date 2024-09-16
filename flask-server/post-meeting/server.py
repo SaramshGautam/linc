@@ -171,11 +171,11 @@ def transcribe_audio():
                 transcript += transcript_chunk
 
             # transcript_folder = '/Users/saramshgautam/linc/flask-server/transcription-services/data/output'
-            transcript_folder = '/home/student/linc/flask-server/transcription-services/data/output'
-            os.makedirs(transcript_folder, exist_ok=True)
-            transcript_file_path = os.path.join(transcript_folder, f'{meeting_id}_transcript.json')
-            with open(transcript_file_path, 'w') as transcript_file:
-                json.dump({"transcript": transcript}, transcript_file, indent=4)
+            # transcript_folder = '/home/student/linc/flask-server/transcription-services/data/output'
+            # os.makedirs(transcript_folder, exist_ok=True)
+            # transcript_file_path = os.path.join(transcript_folder, f'{meeting_id}_transcript.json')
+            # with open(transcript_file_path, 'w') as transcript_file:
+            #     json.dump({"transcript": transcript}, transcript_file, indent=4)
 
             print("Transcription:", transcript)
             return jsonify({'transcript': transcript}), 200
@@ -277,7 +277,7 @@ def process_transcript_endpoint():
 
     # output_file = '/Users/saramshgautam/linc/flask-server/streamgraph/text-rank/bertTopic/topic_intervals_from_server.csv'
 
-    meeting_dir = os.path.join('/home/student/linc/flask-server/data', meeting_id)
+    meeting_dir = os.path.join('/Users/dev/linc/flask-server/data', meeting_id)
     if not os.path.exists(meeting_dir):
         os.makedirs(meeting_dir)
         print(f"Created directory: {meeting_dir}")
@@ -288,15 +288,16 @@ def process_transcript_endpoint():
     result_dict = df_results.to_dict(orient = 'records')
     print("=== Bert Topic Result == \n",result_dict)
 
-    bertopics_folder = '/home/student/linc/flask-server/chordchart/data/input/bertopics'
-    os.makedirs(bertopics_folder, exist_ok=True)
-    bertopics_file_path = os.path.join(bertopics_folder, f'{meeting_id}_bertopics.json')
-    with open(bertopics_file_path, 'w') as bertopics_file:
-        json.dump(df_results.to_dict(orient='records'), bertopics_file, indent=4)
+    # bertopics_folder = '/home/student/linc/flask-server/chordchart/data/input/bertopics'
+    # bertopics_folder = '/home/student/linc/flask-server/chordchart/data/input/bertopics'
+    # os.makedirs(bertopics_folder, exist_ok=True)
+    # bertopics_file_path = os.path.join(bertopics_folder, f'{meeting_id}_bertopics.json')
+    # with open(bertopics_file_path, 'w') as bertopics_file:
+    #     json.dump(df_results.to_dict(orient='records'), bertopics_file, indent=4)
 
-    print(f'BerTopic results successfully saved to {bertopics_file_path}')
+    # print(f'BerTopic results successfully saved to {bertopics_file_path}')
 
-    meeting_dir = os.path.join('/home/student/linc/flask-server/data', meeting_id)
+    meeting_dir = os.path.join('/Users/dev/linc/flask-server/data', meeting_id)
     os.makedirs(meeting_dir, exist_ok=True)
     meeting_bertopics_file_path = os.path.join(meeting_dir, f'{meeting_id}_bertopics.json')
     with open(meeting_bertopics_file_path, 'w') as meeting_bertopics_file:
@@ -390,7 +391,7 @@ def summarize():
 
         print("--- Output from the summarization: \n", final_summary)
 
-        meeting_dir = os.path.join('/home/student/linc/flask-server/data', meeting_id)
+        meeting_dir = os.path.join('/Users/dev/linc/flask-server/data', meeting_id)
 
         # Check if the directory exists, and create it if it doesn't
         if not os.path.exists(meeting_dir):
@@ -437,7 +438,7 @@ def actions():
 
         print("--- The action items from the meeting are:\n", actions)
 
-        meeting_dir = os.path.join('/home/student/linc/flask-server/data', meeting_id)
+        meeting_dir = os.path.join('/Users/dev/linc/flask-server/data', meeting_id)
 
         # Check if the directory exists, and create it if it doesn't
         if not os.path.exists(meeting_dir):
@@ -493,7 +494,7 @@ def predict_sentiment():
 
         print("--- Emoji Prediction Result: \n ", updated_data)
 
-        meeting_dir = os.path.join('/home/student/linc/flask-server/data', meeting_id)
+        meeting_dir = os.path.join('/Users/dev/linc/flask-server/data', meeting_id)
 
         # Check if the directory exists, and create it if it doesn't
         if not os.path.exists(meeting_dir):
@@ -557,7 +558,7 @@ def diarize_audio():
             })
         print("--- Speaker Segments : ----\n", speaker_segments)
 
-        meeting_dir = os.path.join('/home/student/linc/flask-server/data', meeting_id)
+        meeting_dir = os.path.join('/Users/dev/linc/flask-server/data', meeting_id)
         os.makedirs(meeting_dir, exist_ok=True)
 
         # Save the speaker segments to a JSON file in the meeting's directory
@@ -611,7 +612,7 @@ def process_transcript():
 
     print(f' Speaker Indentifying Backend Result \n ${response}')
     
-    meeting_dir = os.path.join('/home/student/linc/flask-server/data', meeting_id)
+    meeting_dir = os.path.join('/Users/dev/linc/flask-server/data', meeting_id)
     os.makedirs(meeting_dir, exist_ok=True)
     speakers_file_path = os.path.join(meeting_dir, f'{meeting_id}_speakers.json')
     with open(speakers_file_path, 'w') as speakers_file:
@@ -667,7 +668,7 @@ def process_transcript_speakers():
     grouped_data = group_into_intervals_speakers(transcript)
     print(f"--- Grouped Data: --- \n {grouped_data}")
 
-    meeting_dir = os.path.join('/home/student/linc/flask-server/data', meeting_id)
+    meeting_dir = os.path.join('/Users/dev/linc/flask-server/data', meeting_id)
 
     # Check if the directory exists, and create it if it doesn't
     if not os.path.exists(meeting_dir):
@@ -701,7 +702,7 @@ def process_transcript_speakers():
         return jsonify({'error': 'No data to save to CSV'}), 400
 
     # output_file = '/Users/saramshgautam/linc/flask-server/streamgraph/speaker/speaker-participation.csv'
-    meeting_dir = os.path.join('/home/student/linc/flask-server/data', meeting_id)
+    meeting_dir = os.path.join('/Users/dev/linc/flask-server/data', meeting_id)
     if not os.path.exists(meeting_dir):
         os.makedirs(meeting_dir)
         print(f"Created directory: {meeting_dir}")
@@ -749,7 +750,7 @@ def get_chord_data():
         print("No meeting_id provided")
         return jsonify({'error': 'Invalid input data'}), 400
 
-    meeting_dir = os.path.join('/home/student/linc/flask-server/data', meeting_id)
+    meeting_dir = os.path.join('/Users/dev/linc/flask-server/data', meeting_id)
     os.makedirs(meeting_dir, exist_ok=True)
     output_file_path = os.path.join(meeting_dir, f"{meeting_id}_chord_data.json")
     
@@ -763,8 +764,8 @@ def get_chord_data():
     # Load the corresponding data from local files
     try:
         # speaker_segment_path = f"/Users/saramshgautam/linc/flask-server/chordchart/data/input/speakersegments/{meeting_id}_speaker_segments.json"
-        speaker_segment_path = f"/home/student/linc/flask-server/data/{meeting_id}/{meeting_id}_speaker_segments.json"
-        bertopics_path = f"/home/student/linc/flask-server/data/{meeting_id}/{meeting_id}_bertopics.json"
+        speaker_segment_path = f"/Users/dev/linc/flask-server/data/{meeting_id}/{meeting_id}_speaker_segments.json"
+        bertopics_path = f"/Users/dev/linc/flask-server/data/{meeting_id}/{meeting_id}_bertopics.json"
         print(f"Loading speaker segments from: {speaker_segment_path}")
         print(f"Loading bertopics from: {bertopics_path}")
         
@@ -843,7 +844,7 @@ def get_csv():
 
     print("-- Meeting ID received to fetch the CSV file:", meeting_id)
     
-    directory = f'/home/student/linc/flask-server/data/{meeting_id}'
+    directory = f'/Users/dev/linc/flask-server/data/{meeting_id}'
 
     if data_type == 'speakers':
         filename = f'{meeting_id}_speaker-participation.csv'
@@ -880,7 +881,7 @@ def save_meeting():
     print(f"Received Meeting Name: {meeting_name}")
     print(f"Received Meeting Date: {meeting_date}")
 
-    meeting_dir = os.path.join('/home/student/linc/flask-server/data', meeting_id)
+    meeting_dir = os.path.join('/Users/dev/linc/flask-server/data', meeting_id)
     print(f"Creating directory: {meeting_dir}")
     os.makedirs(meeting_dir, exist_ok=True)
 
@@ -930,7 +931,7 @@ def save_meeting():
 
 @app.route('/get_meeting_ids', methods=['GET'])
 def get_meeting_ids():
-    data_folder = '/home/student/linc/flask-server/data'
+    data_folder = '/Users/dev/linc/flask-server/data'
     
     try:
         meeting_ids = [d for d in os.listdir(data_folder) if os.path.isdir(os.path.join(data_folder, d))]
@@ -949,7 +950,7 @@ def load_meeting_data():
     else: 
         print('Meeting Id Selected is = ', meeting_id)
 
-    meeting_dir = os.path.join('/home/student/linc/flask-server/data', meeting_id)
+    meeting_dir = os.path.join('/Users/dev/linc/flask-server/data', meeting_id)
     if not os.path.exists(meeting_dir):
         print(f'Meeting directory not found for ID {meeting_id}')
         return jsonify({'error': f'Meeting directory not found for ID {meeting_id}'}), 404

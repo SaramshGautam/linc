@@ -1,0 +1,131 @@
+/* Container settings for the main page */
+.main-container {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-image: url("../../../public/assets/images/background3.jpg"); /* Background image */
+  background-size: cover;  /* Ensures the image covers the entire area */
+  background-position: center;  /* Centers the background image */
+}
+
+/* The authentication form container */
+.auth-container {
+  background-color: rgba(255, 255, 255, 0.9);  /* Light background with slight transparency */
+  color: #000814;  /* Dark text color */
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);  /* Soft shadow for depth */
+  width: 350px;
+  text-align: center;
+  backdrop-filter: blur(15px);  /* Adds a blur effect to the background behind the container */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;  /* Smooth transition for hover effects */
+}
+
+/* Hover effect for the auth container */
+.auth-container:hover {
+  transform: translateY(-5px);  /* Slight upward movement on hover */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);  /* Enhanced shadow on hover */
+}
+
+/* Dark theme version of the auth container */
+.auth-container.dark {
+  background-color: rgba(0, 8, 20, 0.9);  /* Dark background for dark mode */
+  color: #ffffff;  /* Light text for contrast */
+}
+
+/* Heading styling for the auth container */
+.auth-container h1 {
+  margin-bottom: 25px;
+  font-size: 1.8em;  /* Slightly larger font size */
+  font-weight: bold;
+}
+
+/* Form layout within the auth container */
+.auth-container form {
+  display: flex;
+  flex-direction: column;  /* Align form fields vertically */
+}
+
+/* Form group container */
+.auth-container .form-group {
+  margin-bottom: 20px;
+  text-align: center;  /* Left align labels */
+}
+
+/* Label styling */
+.auth-container .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  padding-left: 10px;
+  text-align: left;
+}
+
+/* Input field styling */
+.auth-container input {
+  width: calc(100% - 20px);  /* Full width minus padding */
+  padding: 12px;
+  border: 2px solid #ddd;  /* Default border */
+  border-radius: 5px;  /* Rounded corners */
+  font-size: 1em;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;  /* Smooth transitions */
+}
+
+/* Focus state for input fields */
+.auth-container input:focus {
+  border-color: #ffc300;  /* Highlighted border on focus */
+  box-shadow: 0 0 5px rgba(255, 195, 0, 0.5);  /* Subtle glow effect */
+  outline: none;  /* Remove default browser outline */
+}
+
+/* Submit button styling */
+.auth-container button[type="submit"] {
+  background-color: #ffc300;  /* Golden yellow color */
+  color: #000814;  /* Dark text */
+  border: none;
+  padding: 12px;
+  border-radius: 5px;  /* Rounded corners */
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.3s ease;  /* Smooth transitions */
+}
+
+/* Hover effect for the submit button */
+.auth-container button[type="submit"]:hover {
+  background-color: #ffa000;  /* Darker shade on hover */
+  transform: translateY(-2px);  /* Slight upward movement */
+}
+
+/* Active state for the submit button (pressed) */
+.auth-container button[type="submit"]:active {
+  transform: translateY(0);  /* Resets the translation on press */
+}
+
+/* Toggle button styling */
+.auth-container .toggle-button {
+  background-color: transparent;
+  border: none;
+  color: #007bff;  /* Light blue */
+  cursor: pointer;
+  margin-top: 15px;
+  font-size: 0.9em;
+  transition: color 0.3s ease;  /* Smooth transition for color */
+}
+
+/* Hover effect for the toggle button */
+.auth-container .toggle-button:hover {
+  color: #0056b3;  /* Darker blue on hover */
+  text-decoration: underline;  /* Adds underline effect */
+}
+
+/* General responsive settings for smaller screens */
+@media (max-width: 600px) {
+  .auth-container {
+    width: 90%;  /* Reduce width on small screens */
+    padding: 20px;  /* Adjust padding */
+  }
+}
