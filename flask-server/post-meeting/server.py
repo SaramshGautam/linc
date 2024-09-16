@@ -28,6 +28,8 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 openai.api_key = OPENAI_API_KEY
 
+HF_AUTH_TOKEN = os.getenv("HF_AUTH_TOKEN")
+
 app = Flask(__name__)
 CORS(app)
 
@@ -56,7 +58,7 @@ except Exception as e:
 # Initialize the diarization pipeline
 diarization_pipeline = Pipeline.from_pretrained(
     "pyannote/speaker-diarization-3.1",
-    use_auth_token="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"
+    use_auth_token=HF_AUTH_TOKEN
 )
 
 client = openai
