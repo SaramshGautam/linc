@@ -1,0 +1,4 @@
+valid_participants = {
+    "meeting1": ["e_A1", "e_A2", "e_A3"],
+    "meeting2": ["e_B1", "e_B2", "e_B3"],
+}
