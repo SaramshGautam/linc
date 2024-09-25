@@ -1,0 +1,17 @@
+## real-time.service 
+
+[Unit]
+Description=Gunicorn instance to serve realtime-meeting Flask app
+After=network.target
+
+[Service]
+User=student
+Group=www-data
+WorkingDirectory=/home/student/linc/flask-server/realtime-meeting
+Environment="PATH=/home/student/linc/flask-server/venv/bin"
+ExecStart=/home/student/linc/flask-server/venv/bin/gunicorn --workers 3 --bind unix:realtime-server.sock -m 007 wsgi:app
+
+## ExecStart=/home/student/linc/flask-server/venv/bin/gunicorn --worker-class eventlet --workers 1 --bind 0.0.0.0:5010 wsgi:app
+
+[Install]
+WantedBy=multi-user.target

@@ -77,10 +77,12 @@ def handle_connect():
     global last_end_time
     last_end_time = 0  # Reset last end time on new connection
     print('Client connected')
+    logger.info('Client connected')
 
 @socketio.on('disconnect')
 def handle_disconnect():
     print('Client disconnected')
+    logger.info('Client disconnected')
 
 ####################################################################################################
 # PUSHTOSPEAK FUNCTIONALITY
@@ -93,11 +95,14 @@ def handle_audio(data):
         wav_blob = data['wavBlob']
         language = data['language']
         print("Received audio data, size:", len(wav_blob), "language:", language)
+        logger.info(f"Received audio data of size: {len(wav_blob)}, language: {language}")
+
 
         # Perform transcription
         result = pipe(wav_blob, return_timestamps=True, generate_kwargs={"language": language})
         transcript_chunks = result['chunks']
         print("---transcription output: ", transcript_chunks)
+        logger.info(f"Transcription result: {transcript_chunks}")
 
         transcript_with_timestamps = []
         for chunk in transcript_chunks:

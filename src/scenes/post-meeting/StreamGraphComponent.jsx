@@ -44,13 +44,9 @@ const StreamGraphComponent = ({
       formData.append("dataType", dataType);
 
       try {
-        const response = await axios.post(
-          `http://127.0.0.1:5080/get-csv`,
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
+        const response = await axios.post(`/get-csv`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         const csvData = response.data;
         const parsedData = d3.csvParse(csvData);
         setData(parsedData);

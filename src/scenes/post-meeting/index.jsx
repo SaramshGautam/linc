@@ -167,7 +167,7 @@ const PostMeeting = () => {
 
     try {
       const transcriptionResponse = await axios.post(
-        "http://127.0.0.1:5080/transcription",
+        "/transcription",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -294,13 +294,9 @@ const PostMeeting = () => {
     formData.append("transcript", bertTranscript);
 
     try {
-      const topicResponse = await axios.post(
-        "http://127.0.0.1:5080/bert-topic",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const topicResponse = await axios.post("/bert-topic", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       console.log(" --- Topic generation response ---- \n", topicResponse.data);
       return topicResponse.data.topics; // Return topics data to be stored in state
     } catch (error) {
@@ -316,13 +312,9 @@ const PostMeeting = () => {
     formData.append("transcript", transcript);
 
     try {
-      const speakerResponse = await axios.post(
-        "http://127.0.0.1:5080/speaker-words",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const speakerResponse = await axios.post("/speaker-words", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       console.log(" --- Speaker csv data ---- \n", speakerResponse.data);
       return speakerResponse.data;
     } catch (error) {
@@ -343,15 +335,11 @@ const PostMeeting = () => {
 
     console.log(`MeetingID Chord handleChordDiagram = ${meetingId}`);
     try {
-      const chordResponse = await axios.post(
-        "http://127.0.0.1:5080/get_chord_data",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const chordResponse = await axios.post("/get_chord_data", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       const chordResult = chordResponse.data;
       console.log("--- Chord data ---", chordResult);
       setChordData(chordResult);
@@ -377,13 +365,9 @@ const PostMeeting = () => {
     formData.append("transcript", transcript);
 
     try {
-      const emojiResponse = await axios.post(
-        "http://127.0.0.1:5080/predict-sentiment",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const emojiResponse = await axios.post("/predict-sentiment", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       const emojiResult = emojiResponse.data;
       console.log(" --- Emoji Prediction Result --- \n", emojiResult);
       setEmojiPredictions(emojiResult);
@@ -401,13 +385,9 @@ const PostMeeting = () => {
     formData.append("audio", audioFile);
 
     try {
-      const diarizationResponse = await axios.post(
-        "http://127.0.0.1:5080/diarization",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const diarizationResponse = await axios.post("/diarization", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       const diarizationResult = diarizationResponse.data;
       setSpeakerSegments(diarizationResult);
@@ -511,15 +491,11 @@ const PostMeeting = () => {
     formData.append("language", language);
 
     try {
-      const translationResponse = await axios.post(
-        "http://127.0.0.1:5080/translate",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const translationResponse = await axios.post("/translate", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       const translatedLines = translationResponse.data.translated.split("\n");
       const originalLines = text.split("\n");
@@ -565,13 +541,9 @@ const PostMeeting = () => {
     setLoadingActionItems(true);
 
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:5080/actions",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const response = await axios.post("/actions", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       const actionResult = convertMarkdownToHTML(response.data.actions);
       // setActionItems(actionResult);
@@ -606,13 +578,9 @@ const PostMeeting = () => {
     formData.append("transcript", transcript);
 
     try {
-      const topicsResponse = await axios.post(
-        "http://127.0.0.1:5080/bert-topic",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const topicsResponse = await axios.post("/bert-topic", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       const topicResults = topicsResponse.data.topics;
       console.log("--- Bert Topics --- \n", topicResults);
       setBertopics(topicResults);
@@ -640,13 +608,9 @@ const PostMeeting = () => {
     formData.append("transcript", transcript);
 
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:5080/summarization",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const response = await axios.post("/summarization", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       const htmlSummary = convertMarkdownToHTML(response.data.summary);
       setSummary(htmlToText(htmlSummary));
       setOriginalSummary(htmlToText(htmlSummary));
@@ -746,9 +710,7 @@ const PostMeeting = () => {
   useEffect(() => {
     const fetchMeetingIds = async () => {
       try {
-        const response = await axios.get(
-          "http://127.0.0.1:5080/get_meeting_ids"
-        );
+        const response = await axios.get("/get_meeting_ids");
         if (response.status === 200) {
           const fetchedMeetings = response.data.meeting_ids.map((id) => ({
             id,
@@ -786,13 +748,9 @@ const PostMeeting = () => {
     formData.append("meeting_id", meetingId);
 
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:5080/load_meeting_data",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const response = await axios.post("/load_meeting_data", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       if (response.status === 200) {
         const data = response.data;
@@ -881,7 +839,7 @@ const PostMeeting = () => {
 
     try {
       const speakersResponse = await axios.post(
-        "http://127.0.0.1:5080/generate_speakers",
+        "/generate_speakers",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -952,15 +910,11 @@ const PostMeeting = () => {
     );
     formData.append("radar_chart_data", radarChartData);
 
-    const response = await axios.post(
-      "http://127.0.0.1:5080/save_meeting_data",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await axios.post("/save_meeting_data", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     if (response.status === 200) {
       alert("Meeting and data saved successfully!");

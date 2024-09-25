@@ -860,9 +860,13 @@ def get_csv():
 
 @app.route('/validate', methods=['POST'])
 def validate_participant():
-    data = request.json
+    # data = request.json
+    # meeting_id = data.get('meeting_id')
+    # participant_id = data.get('participant_id')
+
+    data = request.form
     meeting_id = data.get('meeting_id')
-    participant_id = data.get('participant_id')
+    participant_id = data.get('participant_id') 
 
     if meeting_id in config.valid_participants and participant_id in config.valid_participants[meeting_id]:
         return jsonify({"valid": True}), 200
@@ -1044,6 +1048,9 @@ def load_meeting_data():
         print(f"Error loading meeting data for {meeting_id}: {str(e)}")
         return jsonify({'error': f'Error loading meeting data: {str(e)}'}), 500
 
+@app.route('/test', methods=['GET'])
+def test_route():
+    return "Test route is working!", 200
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=5080)
+    app.run(debug=False, host='0.0.0.0', port=8080)

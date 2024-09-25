@@ -1,0 +1,46 @@
+## sudo vim /etc/systemd/system/post_meeting_gunicorn.service
+## post-meeting.service 
+
+[Unit]
+Description=Gunicorn instance to serve post-meeting Flask app
+After=network.target
+
+[Service]
+User=student
+Group=www-data
+WorkingDirectory=/home/student/linc/flask-server/post-meeting
+Environment="PATH=/home/student/linc/flask-server/venv/bin"
+ExecStart=/home/student/linc/flask-server/venv/bin/gunicorn --workers 3 --bind unix:post_meeting.sock -m 007 wsgi:app
+
+[Install]
+WantedBy=multi-user.target
+
+
+## sudo systemctl start post_meeting_guniorn
+## sudo systemctl enable post_meeting_gunicorn
+## sudo systemctl status post_meeting_gunicorn
+
+## sudo systemctl daemon-reload
+## sudo systemctl restart post_meeting_gunicorn
+
+## sudo journalctl -u post_meeting_gunicorn
+## sudo journalctl -u real-time -f
+
+
+
+
+
+
+[Unit]
+Description=Gunicorn instance to serve server post-meeting
+After=network.target
+
+[Service]
+User=student
+Group=www-data
+WorkingDirectory=/home/student/linc/flask-server/post-meeting/
+Environment="PATH=/home/student/linc/flask-server/venv/bin"
+ExecStart=/home/student/linc/flask-server/venv/bin/gunicorn --workers 3 --bind unix:server.sock -m 007 wsgi:app
+
+[Install]
+WantedBy=multi-user.target

@@ -104,12 +104,32 @@ const RealTimeMeeting = () => {
   };
 
   useEffect(() => {
-    transcriptionSocket.current = io("ws://localhost:5010");
-    pushToSpeakSocket.current = io("ws://localhost:5010");
-    translationSocket.current = io("ws://localhost:5010");
+    console.log("Initializing WebSocket connections");
+
+    // transcriptionSocket.current = io("ws://localhost:5010");
+    // pushToSpeakSocket.current = io("ws://localhost:5010");
+    // translationSocket.current = io("ws://localhost:5010");
+
+    // transcriptionSocket.current = io("wss://linc.cse.lsu.edu/socket.io", {
+    transcriptionSocket.current = io("linc.cse.lsu.edu", {
+      transports: ["websocket"],
+      path: "/socket.io/",
+    });
+    pushToSpeakSocket.current = io("linc.cse.lsu.edu", {
+      transports: ["websocket"],
+      path: "/socket.io/",
+    });
+    translationSocket.current = io("linc.cse.lsu.edu", {
+      transports: ["websocket"],
+      path: "/socket.io/",
+    });
 
     transcriptionSocket.current.on("connect", () => {
       console.log("Connected to Transcription WebSocket");
+    });
+
+    transcriptionSocket.current.on("connect_error", (error) => {
+      console.log("WebSocket error:", error);
     });
 
     transcriptionSocket.current.on("transcript", (data) => {
@@ -151,6 +171,10 @@ const RealTimeMeeting = () => {
 
     pushToSpeakSocket.current.on("connect", () => {
       console.log("Connected to Push-To-Speak WebSocket");
+    });
+
+    pushToSpeakSocket.current.on("connect_error", (error) => {
+      console.log("WebSocket error:", error);
     });
 
     pushToSpeakSocket.current.on("transcript", (data) => {
@@ -198,6 +222,10 @@ const RealTimeMeeting = () => {
 
     translationSocket.current.on("connect", () => {
       console.log("Connected to Translation WebSocket");
+    });
+
+    translationSocket.current.on("connect_error", (error) => {
+      console.log("WebSocket error:", error);
     });
 
     translationSocket.current.on("translation", (data) => {
