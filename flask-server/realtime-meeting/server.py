@@ -9,6 +9,9 @@ import re
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
+import time
+
+os.environ["PATH"] += os.pathsep + '/usr/bin'
 
 # Load environment variables
 load_dotenv()
@@ -92,17 +95,22 @@ def handle_disconnect():
 def handle_audio(data):
     global last_end_time
     try:
+        start_audio_time = time.time()
         wav_blob = data['wavBlob']
         language = data['language']
+        target_translation_language = data['to']
         print("Received audio data, size:", len(wav_blob), "language:", language)
         logger.info(f"Received audio data of size: {len(wav_blob)}, language: {language}")
-
+        logger.info(f"Audio received at {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(start_audio_time))}")
+        print(f"Audio received at {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(start_audio_time))}")
 
         # Perform transcription
         result = pipe(wav_blob, return_timestamps=True, generate_kwargs={"language": language})
         transcript_chunks = result['chunks']
-        print("---transcription output: ", transcript_chunks)
-        logger.info(f"Transcription result: {transcript_chunks}")
+        # print("---transcription output: ", transcript_chunks)
+        # logger.info(f"Transcription result: {transcript_chunks}")
+        logger.info(f"Transcription output at {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(time.time()))}: {transcript_chunks}")
+        print(f"Transcription output at {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(time.time()))}: {transcript_chunks}")
 
         transcript_with_timestamps = []
         for chunk in transcript_chunks:
@@ -130,7 +138,40 @@ def handle_audio(data):
                 updated_data.append(item)
 
         print("--- Emoji Prediction Result:\n", updated_data)
-        emit('transcript', updated_data)
+        logger.info(f"Transcription result ready to send at {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(time.time()))}")
+        print(f"Transcription result ready to send at {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(time.time()))}")
+        
+        emit('transcript', updated_data, broadcast=True)
+
+        end_transcription_time = time.time()
+        logger.info(f"Time spent to process audio and transcription: {end_transcription_time - start_audio_time:.2f} seconds")
+
+        # logger.info(f"Time spent to process audio: {time_spent:.2f} seconds")
+
+        if target_translation_language:
+            translated_data = []
+            for item in updated_data:
+                text = item['text']
+                emoji = item['emoji']
+                translated_text = translate_text_gpt4(text, target_translation_language)
+                translated_data.append({
+                    'start': item['start'],
+                    'end': item['end'],
+                    'text': f"{translated_text} {emoji}"
+                })
+
+            print("--Output of Translation: -- ", translated_data)
+            logger.info(f"Translation completed at {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(time.time()))}")
+            print(f"Translation completed at {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(time.time()))}")
+
+            emit('translation', translated_data, broadcast=True)
+        
+        end_audio_time = time.time()
+        time_spent = end_audio_time - start_audio_time
+        logger.info(f"Total time spent to process audio, transcription, and translation: {time_spent:.2f} seconds")
+        print(f"Total time spent to process audio, transcription, and translation: {time_spent:.2f} seconds")
+
+        
 
     except Exception as e:
         logger.error(f"Error processing audio: {e}")
@@ -180,31 +221,31 @@ def translate_text_gpt4(text, target_language):
         logging.error(f"Error in translate_text_gpt4: {e}")
         raise
 
-@socketio.on('translate')
-def translate_text(data):
-    try:
-        text_to_translate = data.get('text')
-        target_language = data.get('to')
+# @socketio.on('translate')
+# def translate_text(data):
+#     try:
+#         text_to_translate = data.get('text')
+#         target_language = data.get('to')
 
-        print('--- Transcript received from the frontend: ---\n', text_to_translate)
-        print('--- Target language received from the frontend: --- ', target_language)
+#         print('--- Transcript received from the frontend: ---\n', text_to_translate)
+#         print('--- Target language received from the frontend: --- ', target_language)
 
-        translated_data = []
+#         translated_data = []
 
-        for item in text_to_translate:
-            text = item.get('text', '')
-            translated_text = translate_text_gpt4(text, target_language)
-            translated_data.append({
-                'start': item.get('start'),
-                'end': item.get('end'),
-                'text': translated_text
-            })
+#         for item in text_to_translate:
+#             text = item.get('text', '')
+#             translated_text = translate_text_gpt4(text, target_language)
+#             translated_data.append({
+#                 'start': item.get('start'),
+#                 'end': item.get('end'),
+#                 'text': translated_text
+#             })
 
-        print("--Output of Translation: ", translated_data)
-        emit('translation', translated_data)
-    except Exception as e:
-        logging.error(f"Error in translate_text endpoint: {e}")
-        emit('translation', {'error': 'Error in translation'})
+#         print("--Output of Translation: ", translated_data)
+#         emit('translation', translated_data)
+#     except Exception as e:
+#         logging.error(f"Error in translate_text endpoint: {e}")
+#         emit('translation', {'error': 'Error in translation'})
 
 ####################################################################################################
 # MAIN APPLICATION RUNNER
