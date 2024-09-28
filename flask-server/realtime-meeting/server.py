@@ -141,7 +141,7 @@ def handle_audio(data):
         logger.info(f"Transcription result ready to send at {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(time.time()))}")
         print(f"Transcription result ready to send at {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(time.time()))}")
         
-        emit('transcript', updated_data, broadcast=True)
+        emit('transcript', updated_data)
 
         end_transcription_time = time.time()
         logger.info(f"Time spent to process audio and transcription: {end_transcription_time - start_audio_time:.2f} seconds")
@@ -164,7 +164,7 @@ def handle_audio(data):
             logger.info(f"Translation completed at {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(time.time()))}")
             print(f"Translation completed at {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(time.time()))}")
 
-            emit('translation', translated_data, broadcast=True)
+            emit('translation', translated_data)
         
         end_audio_time = time.time()
         time_spent = end_audio_time - start_audio_time
@@ -221,35 +221,6 @@ def translate_text_gpt4(text, target_language):
         logging.error(f"Error in translate_text_gpt4: {e}")
         raise
 
-# @socketio.on('translate')
-# def translate_text(data):
-#     try:
-#         text_to_translate = data.get('text')
-#         target_language = data.get('to')
-
-#         print('--- Transcript received from the frontend: ---\n', text_to_translate)
-#         print('--- Target language received from the frontend: --- ', target_language)
-
-#         translated_data = []
-
-#         for item in text_to_translate:
-#             text = item.get('text', '')
-#             translated_text = translate_text_gpt4(text, target_language)
-#             translated_data.append({
-#                 'start': item.get('start'),
-#                 'end': item.get('end'),
-#                 'text': translated_text
-#             })
-
-#         print("--Output of Translation: ", translated_data)
-#         emit('translation', translated_data)
-#     except Exception as e:
-#         logging.error(f"Error in translate_text endpoint: {e}")
-#         emit('translation', {'error': 'Error in translation'})
-
-####################################################################################################
-# MAIN APPLICATION RUNNER
-####################################################################################################
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=5010, debug=False)  
