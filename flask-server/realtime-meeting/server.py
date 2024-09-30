@@ -87,9 +87,6 @@ def handle_disconnect():
     print('Client disconnected')
     logger.info('Client disconnected')
 
-####################################################################################################
-# PUSHTOSPEAK FUNCTIONALITY
-####################################################################################################
 
 @socketio.on('audio')
 def handle_audio(data):
@@ -141,7 +138,7 @@ def handle_audio(data):
         logger.info(f"Transcription result ready to send at {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(time.time()))}")
         print(f"Transcription result ready to send at {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(time.time()))}")
         
-        emit('transcript', updated_data)
+        emit('transcript', updated_data, broadcast=True)
 
         end_transcription_time = time.time()
         logger.info(f"Time spent to process audio and transcription: {end_transcription_time - start_audio_time:.2f} seconds")
@@ -177,14 +174,9 @@ def handle_audio(data):
         logger.error(f"Error processing audio: {e}")
         emit('transcript', {'error': 'Error processing audio'})
 
-####################################################################################################
-# REALTIME TRANSLATION FUNCTIONALITY
-####################################################################################################
 
 # Set your OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
-# OPENAI_API_KEY = 'your_openai_api_key_here'
-# openai.api_key = OPENAI_API_KEY
 
 # Supported language pairs for translation
 supported_languages = [
@@ -192,7 +184,10 @@ supported_languages = [
     ("en", "zh"),  # English to Mandarin
     ("en", "ar"),  # English to Arabic
     ("en", "hi"),  # English to Hindi
-    ("en", "bn")   # English to Bengali
+    ("en", "bn"),   # English to Bengali
+    ("en", "pt"),  # English to Portuguese
+    ("en", "fr"),  # English to French
+    ("en", "ar")   # English to Arabic
 ]
 
 def translate_text_gpt4(text, target_language):
@@ -220,7 +215,6 @@ def translate_text_gpt4(text, target_language):
     except Exception as e:
         logging.error(f"Error in translate_text_gpt4: {e}")
         raise
-
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=5010, debug=False)  
