@@ -30,8 +30,7 @@ pip install -r requirements.txt
 
 # Set environment variables from .env (ensure .env file exists)
 if [ -f .env ]; then
-    echo "Loading environment variables from .env file..."
-    export $(grep -v '^#' .env | xargs)
+    echo ".env file found"
 else
     echo ".env file not found. Please ensure it exists with the necessary environment variables (e.g., OPENAI_API_KEY)."
     exit 1
